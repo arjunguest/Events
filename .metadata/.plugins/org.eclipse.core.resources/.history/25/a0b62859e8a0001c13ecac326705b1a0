@@ -1,7 +1,0 @@
-from django.shortcuts import render,redirect
-
-
-# Create your views here.
-def Dashboard(request):
-        if request.method == 'GET':
-            return render(requet, index5.html)

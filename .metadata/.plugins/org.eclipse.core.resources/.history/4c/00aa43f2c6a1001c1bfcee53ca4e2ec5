@@ -29,7 +29,7 @@ def Dashboard(request):
         if request.method == 'GET':
             current_date=date.today()
             print(current_date)
-            event_list = Events.objects.filter(start_date__gte= current_date)
+            event_list = Events.objects.filter(start_date__gt= current_date)
             categories_list = Categories.objects.all() 
             
             # pagination

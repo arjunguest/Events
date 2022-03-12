@@ -27,9 +27,7 @@ def Login(request):
         return render(request,'pages-login.html',{'form' : form})
 def Dashboard(request):
         if request.method == 'GET':
-            current_date=date.today()
-            print(current_date)
-            event_list = Events.objects.filter(start_date__gte= current_date)
+            event_list = Events.objects.filter(start_date>=["2022-03-12"])
             categories_list = Categories.objects.all() 
             
             # pagination
