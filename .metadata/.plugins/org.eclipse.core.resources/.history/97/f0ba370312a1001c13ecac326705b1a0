@@ -1,6 +1,0 @@
-.event_main{
-    display:grid;
-}
-.event_content{
-    display:flex;
-}

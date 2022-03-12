@@ -1,9 +1,0 @@
-from django.urls import path, include
-from DemoApp import views
-
-
-app_name = 'DemoApp'
-urlpatterns = [
-        path("",views.Dashboard,name='dashboard'),
-        path("dashboard/",views.Dashboard,name='dashboard'),
-    ]
