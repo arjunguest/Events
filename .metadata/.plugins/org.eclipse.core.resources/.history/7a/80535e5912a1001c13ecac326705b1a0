@@ -1,0 +1,9 @@
+.event_main{
+    display:grid;
+}
+.event_content{
+    display:flex;
+}
+.event_content > div:last-child{
+    margin-left:auto;
+}

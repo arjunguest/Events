@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <!-- Favicon icon -->
+    <link rel="icon" type="image/png" sizes="16x16" href="">
+    <title>Events</title>
+    <!-- Bootstrap Core CSS -->
+    <link href="{{STATIC_URL}}assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <!-- chartist CSS -->
+    <link href="{{STATIC_URL}}assets/plugins/chartist-js/dist/chartist.min.css" rel="stylesheet">
+    <link href="{{STATIC_URL}}assets/plugins/chartist-js/dist/chartist-init.css" rel="stylesheet">
+    <link href="{{STATIC_URL}}assets/plugins/chartist-plugin-tooltip-master/dist/chartist-plugin-tooltip.css" rel="stylesheet">
+    <link href="{{STATIC_URL}}assets/plugins/css-chart/css-chart.css" rel="stylesheet">
+    <!--This page css - Morris CSS -->
+    <link href="{{STATIC_URL}}assets/plugins/morrisjs/morris.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="{{STATIC_URL}}css/style.css" rel="stylesheet">
+    <!-- You can change the theme colors from here -->
+    <link href="{{STATIC_URL}}css/colors/blue.css" id="theme" rel="stylesheet">
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+</head>
+
+<body class="fix-header fix-sidebar card-no-border">
+    <!-- ============================================================== -->
+    <!-- Preloader - style you can find in spinners.css -->
+    <!-- ============================================================== -->
+    <div class="preloader">
+        <svg class="circular" viewBox="25 25 50 50">
+            <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10" /> </svg>
+    </div>
+    <!-- ============================================================== -->
+    <!-- Main wrapper - style you can find in pages.scss -->
+    <!-- ============================================================== -->
+    <div id="main-wrapper">
+        <!-- ============================================================== -->
+        <!-- Topbar header - style you can find in pages.scss -->
+        <!-- ============================================================== -->
+        <header class="topbar">
+            <nav class="navbar top-navbar navbar-expand-md navbar-light">
+
+                
+            </nav>
+        </header>
+        
+        <div class="">
+            <!-- ============================================================== -->
+            <!-- Container fluid  -->
+            <!-- ============================================================== -->
+            <div class="container-fluid">
+                <!-- ============================================================== -->
+                <!-- Bread crumb and right sidebar toggle -->
+                <!-- ============================================================== -->
+                <div class="row page-titles">
+                    <div class="col-md-5 col-8 align-self-center">
+                        <h3 class="text-themecolor m-b-0 m-t-0">Dashboard</h3>
+                        <ol class="breadcrumb">
+                           <!--  <li class="breadcrumb-item"><a href="javascript:void(0)">Home</a></li> -->
+                            <li class="breadcrumb-item active">Dashboard</li>
+                        </ol>
+                    </div>
+                    
+                </div>
+                <!-- ============================================================== -->
+                <!-- End Bread crumb and right sidebar toggle -->
+                <!-- ============================================================== -->
+                <!-- ============================================================== -->
+                <!-- Start Page Content -->
+                <!-- ============================================================== -->
+                
+                <!-- Row -->
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="row">
+                                <div class="col-lg-5 col-md-5">
+                                    <div class="card-body">
+                                        <h3>Event List</h3>
+                                        <h6 class="card-subtitle m-b-0">check the list of event</h6> </div>
+                                </div>
+                                <div class="col-lg-2 col-md-2 b-r align-self-center">
+                                    <div class="card-body">
+                                        <div class="d-flex flex-row">
+                                            <div class="col-8 p-0 align-self-center custom_select">
+                                            <form action="" method="GET" id ="my_form" >
+                                             <select name = "date" onchange="dateChange()" id="mdate"> 
+                                                <option>Year</option>
+                                                <option {%if form_date == '2018' %}selected{%endif%}>2018</option>
+                                                
+                                                <option {%if form_date == '2019'%}selected{%endif%}>2019</option>
+                                                
+                                                <option {%if form_date == '2020' %}selected {%endif%}>2020</option>
+                                                
+                                               
+                                                </select>
+                                            </form>
+                                                 </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <hr class="m-t-0"> </div>
+                            <table class="chartist-chart andvios m-t-40 table"> 
+                                <tr>
+                                    <th>Title</th>
+                                    <th>Description</th>
+                                    <th>Location</th>
+                                    <th>Start date</th>
+                                    <th>End date</th>
+                                    <th>Image</th>
+                                    <th>Categories</th>
+                                    <th>Published</th>
+                                     <th>Paid</th>
+                                </tr>
+                                <tr>
+                                {% for i in event_list%}
+                                    <th>{{i.title}}</th>
+                                    <th>{{i.description}}</th>
+                                    <th>{{i.location}}</th>
+                                    <th>{{i.start_date}}</th>
+                                    <th>{{i.end_date}}</th>
+                                    <th>
+                                        <img src="{{i.image.url}}" style="width:150px; height:150px;">
+                                        
+                                    </th>
+                                    <th>{{i.categories}}</th>
+                                    <th>{{i.published}}</th>
+                                     <th>
+                                        {%if i.paid == True %}
+                                        Paid
+                                        {%else%}
+                                        Unpaid
+                                        {% endif%}
+                                     </th>
+                                {% endfor %}
+                                </tr>
+                            </table>
+                            
+                        </div>
+                    </div>
+                </div>
+                <!-- Row -->
+                <div class="row">
+                   
+                <!-- Row -->
+                <!-- ============================================================== -->
+                <!-- End PAge Content -->
+                <!-- ============================================================== -->
+                <!-- ============================================================== -->
+                <!-- Right sidebar -->
+                <!-- ============================================================== -->
+                <!-- .right-sidebar -->
+                
+                <!-- ============================================================== -->
+                <!-- End Right sidebar -->
+                <!-- ============================================================== -->
+            </div>
+            <!-- ============================================================== -->
+            <!-- End Container fluid  -->
+            <!-- ============================================================== -->
+            <!-- ============================================================== -->
+            <!-- footer -->
+            <!-- ============================================================== -->
+            <footer class="footer"> Events List Dashboard </footer>
+            <!-- ============================================================== -->
+            <!-- End footer -->
+            <!-- ============================================================== -->
+        </div>
+        <!-- ============================================================== -->
+        <!-- End Page wrapper  -->
+        <!-- ============================================================== -->
+    </div>
+    <!-- ============================================================== -->
+    <!-- End Wrapper -->
+    <!-- ============================================================== -->
+    <!-- ============================================================== -->
+    <!-- All Jquery -->
+    <!-- ============================================================== -->
+    <script src="{{STATIC_URL}}assets/plugins/chartist-js/dist/chartist.min.js"></script>
+    <script src="{{STATIC_URL}}assets/plugins/chartist-plugin-tooltip-master/dist/chartist-plugin-tooltip.min.js"></script>
+    <script>
+     
+    function dateChange(){
+        $('#my_form').submit();
+    }
+                            
+    </script>
+    <script src="{{STATIC_URL}}assets/plugins/jquery/jquery.min.js"></script>
+    <!-- Bootstrap tether Core JavaScript -->
+    <script src="{{STATIC_URL}}assets/plugins/popper/popper.min.js"></script>
+    <script src="{{STATIC_URL}}assets/plugins/bootstrap/js/bootstrap.min.js"></script>
+    <!-- slimscrollbar scrollbar JavaScript -->
+    <script src="{{STATIC_URL}}js/jquery.slimscroll.js"></script>
+    <!--Wave Effects -->
+    <script src="{{STATIC_URL}}js/waves.js"></script>
+    <!--Menu sidebar -->
+    <script src="{{STATIC_URL}}js/sidebarmenu.js"></script>
+    <!--stickey kit -->
+    <script src="{{STATIC_URL}}assets/plugins/sticky-kit-master/dist/sticky-kit.min.js"></script>
+    <script src="{{STATIC_URL}}assets/plugins/sparkline/jquery.sparkline.min.js"></script>
+    <!--Custom JavaScript -->
+    <script src="{{STATIC_URL}}js/custom.min.js"></script>
+    <!-- ============================================================== -->
+    <!-- This page plugins -->
+    <!-- ============================================================== -->
+ 
+    <script src="{{STATIC_URL}}assets/plugins/sparkline/jquery.sparkline.min.js"></script>
+    <!-- Chart JS -->
+    <script src="{{STATIC_URL}}assets/plugins/echarts/echarts-all.js"></script>
+    <!-- Flot Charts JavaScript -->
+    <script src="{{STATIC_URL}}assets/plugins/flot/excanvas.js"></script>
+    <script src="{{STATIC_URL}}assets/plugins/flot/jquery.flot.js"></script>
+    <script src="{{STATIC_URL}}assets/plugins/flot/jquery.flot.time.js"></script>
+    <script src="{{STATIC_URL}}assets/plugins/flot.tooltip/js/jquery.flot.tooltip.min.js"></script>
+    <!-- <script src="{{STATIC_URL}}js/dashboard5.js"></script> -->
+    <!-- ============================================================== -->
+    <!-- Style switcher -->
+    <!-- ============================================================== -->
+    <script src="{{STATIC_URL}}assets/plugins/styleswitcher/jQuery.style.switcher.js"></script>
+</body>
+
+</html>

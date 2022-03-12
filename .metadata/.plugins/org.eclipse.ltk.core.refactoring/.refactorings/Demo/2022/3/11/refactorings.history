@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename resource &apos;Demo/DemoApp/form.py&apos; to &apos;forms.py&apos;" description="Rename resource &apos;form.py&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="DemoApp/form.py" name="forms.py" stamp="1646974353687" updateReferences="true"/>
+</session>
