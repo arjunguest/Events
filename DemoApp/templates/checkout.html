@@ -1,0 +1,16 @@
+<html>
+    <h2>Pay Rs. 500</h2>
+    {% for i in pay_event%}
+    <form action="{% url 'DemoApp:success' i.id %}" method="post"> 
+     
+     {% csrf_token %}  
+     <script src="https://checkout.stripe.com/checkout.js"
+          class="stripe-button"          
+          data-key="{{ key }}"          
+          data-description="A Django Charge"          
+          data-amount="500"          
+          data-locale="prod_LJRqyalZxbD0hY">
+     </script>
+    </form>
+    {% endfor %}
+</html>

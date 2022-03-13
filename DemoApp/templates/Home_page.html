@@ -25,6 +25,7 @@
     <link href="{{STATIC_URL}}css/main.css" rel="stylesheet">
     <!-- You can change the theme colors from here -->
     <link href="{{STATIC_URL}}css/colors/blue.css" id="theme" rel="stylesheet">
+    
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -121,7 +122,7 @@
                                                                 
                                                             <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                                                             {% for j in categories_list %}
-                                                                <a class="dropdown-item" href="/{{j.id}}">{{j.category}}</a>
+                                                                <a class="dropdown-item" href="event_category/{{j.category}}">{{j.category}}</a>
                                                             {% endfor %} 
                                                             </div>
                                                         </div>
@@ -151,7 +152,7 @@
                                     </div>
                                     <div class="event_btn_sec">
                                         <div>
-                                            <button type="button" class="btn event_book_btn">Book Here</button>
+                                            <a href="checkout/{{i.id}}" type="button" class="btn event_book_btn">Book Here</a>
                                         </div>
                                         <div>
                                             {%if i.paid == True %}
@@ -306,7 +307,7 @@
                                             <div class="event_details" id="event_details">    
                                                 <div>Event : ${dt_event.title}</div>
                                                 <div>Description : ${dt_event.description}</div>
-                                                <div>Location : ${dt_event.location}</div>  mcat
+                                                <div>Location : ${dt_event.location}</div>
                                                 <div>Category : ${dt_event.categories}</div>
                                                 <div>Start Date : ${dt_event.start_date}</div>
                                                 <div>End Date : ${dt_event.end_date}</div>

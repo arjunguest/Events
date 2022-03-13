@@ -4,11 +4,17 @@ from django.contrib.auth.models import User
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from datetime import date
 from django.http import JsonResponse
+from django.conf import settings
 import json
+import stripe
 # Forms
 from DemoApp.forms import LoginForm
 # Models 
 from DemoApp.models import Events,Categories
+from django.urls.base import reverse
+from pickle import TRUE
+stripe.api_key = settings.STRIPE_SECERT_KEY
+
 
 
 # Create your views here.
@@ -27,7 +33,7 @@ def Login(request):
     else:
         form= LoginForm()
         return render(request,'pages-login.html',{'form' : form})
-def Dashboard(request,id=None):
+def Dashboard(request):
         if request.method == 'POST' and request.is_ajax():
             if request.POST['action'] == 'date_event_action':
                 cat_event = request.POST.get('Date_key')
@@ -87,7 +93,6 @@ def Dashboard(request,id=None):
                             'categories':pos.categories.category,
                             'start_date':pos.start_date,
                             'end_date':pos.end_date,
-                            'published':pos.published,
                             'paid':pos.paid,
                         }
                         data.append(items)
@@ -99,8 +104,12 @@ def Dashboard(request,id=None):
         else:
             current_date=date.today()
             print(current_date)
-            event_list = Events.objects.filter(start_date__gte= current_date)
+            event_list = Events.objects.filter(start_date__gte= current_date).exclude (published= False)
             categories_list = Categories.objects.all() 
+            for j in event_list:
+                print("event_list",j.id)
+                print("event_list",j.title)
+                print("event_list",j.published)
             
             # pagination
             
@@ -126,7 +135,43 @@ def EventDetails(request,pk):
         "event_db":event_db,
         }
     return render(request, 'Event.html',context=context)
-            
+
+def EventCatagory(request,category):
+
+    print("event_db",category)
+    cat_db=Events.objects.filter(categories__category=category)
+    context={
+        'cat_db':cat_db,
+        }
+    return render(request, 'category.html',context=context)
+
+
+def create_checkout_session(request,id): 
+    if request.method == 'POST':
+        print("arjun")
+        charge = stripe.Charge.create(
+            amount=500,
+            currency='usd',
+            description='A Django charge',
+            source=request.POST['stripeToken']
+        )
+        return render(request, 'charge.html')
+    else:     
+        pay_event=Events.objects.filter(pk=id)
+        context={
+            'key':settings.STRIPE_PUBLISHABLE_KEY ,
+            'pay_event':pay_event,
+            }
+        return render(request,'checkout.html',context=context)       
+    
+
+def success(request,id):
+    print("id",id)
+    event_success=Events.objects.filter(pk=id).update(paid=True)
+    print('event_success',event_success)
+    return render(request, 'success.html')
+def cancel(request):
+    return render(request, 'cancel.html')
 def Logout(request):
     logout(request)
     return redirect('DemoApp:login')
