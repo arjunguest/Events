@@ -7,5 +7,6 @@ app_name = 'DemoApp'
 urlpatterns = [
         path('',views.Login,name='login'),
         path('dashboard/', csrf_exempt(views.Dashboard),name='dashboard'),
+        path('dashboard/event_details/<int:pk>',views.EventDetails,name='eventdetails'),
         path('logout/',views.Logout,name='logout'),
     ]

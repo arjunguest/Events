@@ -66,11 +66,15 @@
                     const data = res.data
                     if (Array.isArray(data)) {
                         console.log('we have an array')
-                        data.forEach(game=> {
-                            resultBox ==`
+                        data.forEach(event=> {
+                            searchBox.innerHTML +=`
                                 <a href="" class="item">
-                                    <div>
-                                        hello
+                                    <div class="row">
+                                        <div class="col-12">
+                                            ${event.title},
+                                            <p class="text-muted h6">${event.description},${event.location}</p>
+                                            
+                                        </div
                                     </div>
                                 </a>
                             `

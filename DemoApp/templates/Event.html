@@ -98,53 +98,20 @@
                                         <h6 class="card-subtitle m-b-0">check the list of event</h6> 
                                     </div>
                                 </div>
-                                <div class="col-lg-9 col-md-12 col-sm-12">
-                                    
-                                        <div class="card-body">
-                                            <div class="filter_sec">
-                                                <div>
-                                                    <form action="" id="event_form">
-                                                        {% csrf_token %}
-                                                        <input type="text" class="form-control" placeholder="search" id="event_search" name="event_search" >
-                                                        <div id="search_result" class="event_result not_visible"></div>
-                                                    </form>
-                                                </div>
-                                                <div>
-                                                    <input type="date" class="form-control" id="event_date" name="event_date" >
-                                                </div>
-                                                <div>      
-                                                    <form action="" id="cat_form">                                        
-                                                        <div class="dropdown show">
-                                                            <button class="btn btn btn-light dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                                Categories
-                                                            </button>
-                                                                
-                                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                                            {% for j in categories_list %}
-                                                                <a class="dropdown-item" href="/{{j.id}}">{{j.category}}</a>
-                                                            {% endfor %} 
-                                                            </div>
-                                                        </div>
-                                                    </form>                                         
-                                                </div>
-                                            </div>
-                                        </div> 
-                                    
-                                </div>
                             </div>    
                             <div>
-                                <hr class="m-t-0">
+                                <hr class="m-t-0"> 
                             </div>
-                            <div class="event_main" id="event_main">
-                            {% for i in event_page %}                              
+                            <div class="event_main">
+                            {% for i in event_db %}                              
                                 <div class="event_content">
                                     <div class="event_img_frame">
                                         <img src="{{i.image.url}}" class="event_img">
                                     </div>
-                                    <div class="event_details" id="event_details">    
+                                    <div class="event_details">    
                                         <div>Event : {{i.title}}</div>
                                         <div>Description : {{i.description}}</div>
-                                        <div>Location : {{i.location}}</div>
+                                        <div>Location : {{i.location}}</div>  
                                         <div>Category : {{i.categories}}</div>
                                         <div>Start Date : {{i.start_date}}</div>
                                         <div>End Date : {{i.end_date}}</div>
@@ -181,7 +148,7 @@
                         <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
                     {% else %}
                         <li><a href="?page={{ i }}">{{ i }}</a></li>
-                    {% endif %}
+                    {% endif %}event_search
                     {% endfor %}
                     {% if event_page.has_next %}
                         <li><a href="?page={{ users.next_page_number }}">&raquo;</a></li>
@@ -214,126 +181,6 @@
     <!-- ============================================================== -->
     <script src="{{STATIC_URL}}assets/plugins/chartist-js/dist/chartist.min.js"></script>
     <script src="{{STATIC_URL}}assets/plugins/chartist-plugin-tooltip-master/dist/chartist-plugin-tooltip.min.js"></script>
-    <script>
-        console.log('Hello ')
-        const searchForm = document.getElementById('event_form')
-        const searchInput = document.getElementById('event_search')
-        const searchBox = document.getElementById('search_result')
-        
-        const csrf = document.getElementsByName('csrfmiddlewaretoken')[0].value
-        const sendSearchData = (search_key) =>{
-            $.ajax({
-                type: 'POST',
-                url: '',
-                data:{
-                    'csrfmiddlewaretoken': csrf,
-                    'search_key' : search_key,
-                    action: 'search_event_action',
-                },
-                success: (res)=> {
-                    console.log(res.data)
-                    const data = res.data
-                    if (Array.isArray(data)) {
-                        console.log('we have an array')
-                        data.forEach(event=> {
-                            searchBox.innerHTML +=`
-                                <a href="event_details/${event.pk}" class="item">
-                                    <div class="row">
-                                        <div class="col-12">
-                                            ${event.title},
-                                            <p class="text-muted h6">${event.description},${event.location}</p>
-                                            
-                                        </div
-                                    </div>
-                                </a>
-                            `
-                        })
-                    } else{
-                        if (searchInput.value.length > 0) {
-                            searchBox.innerHTML = `<b>${data}</b>`
-                        }
-                        else{ 
-                            searchBox.classList.add('not_visible')
-                        }
-                    }
-
-                },
-                error: (err)=>{
-                    console.log(err)
-                }
-            });
-        }
-        searchInput.addEventListener('keyup',e=>{
-            console.log(e.target.value)
-
-            if (searchBox.classList.contains('not_visible')){
-                searchBox.classList.remove('not_visible')
-            }         
-            sendSearchData(e.target.value) 
-        })
-    </script>
-    <script type="text/javascript">
-
-        var eventDate = document.getElementById('event_date');
-        var dateSection = document.getElementById('event_main');
-        eventDate.valueAsDate = new Date()
-        eventDate.onchange = function(){
-                console.log(this.value);
-                $.ajax({
-                    type: 'POST',
-                    url: '',
-                    data:{
-                        'Date_key' : this.value,
-                        action: 'date_event_action'
-                    },
-                    success: (date_res)=> {
-                        console.log(date_res.date_res);
-                        const dt_data = date_res.date_res
-                        if (Array.isArray(dt_data)) {
-                            $('#event_main').html(event_main);
-                            console.log('we have an array')
-                            if(dt_data==0){
-                                dateSection.innerHTML ="Nothing found"
-                            }else{
-                                dt_data.forEach(dt_event=> {
-                                    console.log(dt_event)
-                                    
-                                    dateSection.innerHTML +=`
-                                        <div class="event_content">
-                                            <div class="event_img_frame">
-                                                <img src="${dt_event.image}" class="event_img">
-                                            </div>
-                                            <div class="event_details" id="event_details">    
-                                                <div>Event : ${dt_event.title}</div>
-                                                <div>Description : ${dt_event.description}</div>
-                                                <div>Location : ${dt_event.location}</div>  mcat
-                                                <div>Category : ${dt_event.categories}</div>
-                                                <div>Start Date : ${dt_event.start_date}</div>
-                                                <div>End Date : ${dt_event.end_date}</div>
-                                                
-                                     
-                                            </div>
-                                            <div class="event_btn_sec">
-                                                <div>
-                                                    <button type="button" class="btn event_book_btn">Book Here</button>
-                                                </div>
-                                                <div>
-                                                    ${dt_event.paid}
-                                                </div>
-                                            </div>
-                                        </div>    
-                                    `
-                                })
-                            }
-                            
-                        }
-                    },
-                });
-            }
-            
-        
-    </script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha256-pasqAKBDmFT4eHoN2ndd6lN370kFiGUFyTiUHWhU7k8=" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
     <script src="{{STATIC_URL}}assets/plugins/jquery/jquery.min.js"></script>
